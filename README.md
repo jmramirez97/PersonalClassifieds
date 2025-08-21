@@ -105,7 +105,7 @@ VITE_SHAREPOINT_LIST_IDS={"ads":"ClassifiedAds","categories":"Categories","users
 
 ```bash
 # Development mode
-npm run dev
+VITE_USE_MOCK=true npm run dev
 
 # Build for production
 npm run build

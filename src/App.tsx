@@ -5,11 +5,13 @@ import { loginRequest } from './auth/msalConfig';
 import { ClassifiedsListing } from './components/ClassifiedsListing';
 import { CreateAdForm } from './components/CreateAdForm';
 import type { ClassifiedAd } from './types/classifieds';
+import { USE_MOCK } from './config';
 
 function App() {
   const { instance, accounts } = useMsal();
 
   useEffect(() => {
+    if (USE_MOCK) return;
     if (accounts.length === 0) {
       instance.loginPopup(loginRequest).catch(() => {
         // ignore; user can retry
@@ -37,7 +39,7 @@ function App() {
     }
   };
 
-  if (accounts.length === 0) {
+  if (!USE_MOCK && accounts.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
@@ -63,14 +65,16 @@ function App() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <h1 className="text-2xl font-bold text-gray-900">Company Classifieds</h1>
-                <span className="text-sm text-gray-500">Welcome, {accounts[0]?.name}</span>
+                <span className="text-sm text-gray-500">Welcome, {USE_MOCK ? 'Mock User' : accounts[0]?.name}</span>
               </div>
-              <button
-                onClick={() => instance.logout()}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                Sign Out
-              </button>
+              {!USE_MOCK && (
+                <button
+                  onClick={() => instance.logout()}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  Sign Out
+                </button>
+              )}
             </div>
           </div>
         </header>
